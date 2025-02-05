@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quality Progress Chart</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+</head>
+<body style="background: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh;">
+
+<div id="qualityChart" style="width: 450px; height: 300px;"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var quality = 85; // Change dynamically
+
+    var chart = Highcharts.chart('qualityChart', {
+        chart: {
+            type: 'solidgauge',
+            height: '50%',
+            backgroundColor: 'transparent'
+        },
+        title: {
+            text: 'Quality Progress',
+            style: {
+                fontSize: '18px',
+                fontWeight: 'bold',
+                color: '#333'
+            },
+            y: 30
+        },
+        pane: {
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                outerRadius: '100%',
+                innerRadius: '70%',
+                shape: 'arc',
+                borderWidth: 0,
+                backgroundColor: '#ddd'
+            }
+        },
+        yAxis: {
+            min: 0,
+            max: 100,
+            lineWidth: 0,
+            tickPositions: [],
+            stops: [
+                [0.3, '#D9534F'],  // Poor (Red)
+                [0.6, '#F0AD4E'],  // Fair (Orange)
+                [0.8, '#5BC0DE'],  // Good (Blue)
+                [1, '#5CB85C']      // Excellent (Green)
+            ]
+        },
+        plotOptions: {
+            solidgauge: {
+                dataLabels: {
+                    y: -25,
+                    borderWidth: 0,
+                    useHTML: true,
+                    format: `<div style="text-align:center;">
+                                <span style="font-size:28px; font-weight:bold; color:#333;">{y}%</span>
+                                <br/>
+                                <span style="font-size:14px; color:#555;">Quality</span>
+                             </div>`
+                },
+                rounded: true,
+                animation: {
+                    duration: 2000  // Smooth fill animation
+                }
+            }
+        },
+        series: [{
+            name: 'Quality',
+            data: [0],  // Start from 0, will animate to quality value
+            tooltip: { valueSuffix: '%' }
+        }]
+    });
+
+    // Animate progress fill after chart loads
+    setTimeout(() => {
+        chart.series[0].setData([quality]);
+    }, 500);
+});
+</script>
+
+</body>
+</html>
